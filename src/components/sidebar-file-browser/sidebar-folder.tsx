@@ -21,8 +21,10 @@ export const SidebarFolder = ({ file: { id, name }, level = 0 }: Props) => {
   const { openFiles, setOpenFiles } = useSidebarFileBrowser();
 
   const paddingPerLevel = 8;
-  const children = files.filter((file) => file.parent === id);
-  const hasChildren = children.length > 0;
+  const childrenFolders = files.filter(
+    (file) => file.type === 'folder' && file.parent === id,
+  );
+  const hasChildren = childrenFolders.length > 0;
   const Caret = hasChildren ? AccordionChevron : BsDot;
 
   return (
@@ -54,7 +56,7 @@ export const SidebarFolder = ({ file: { id, name }, level = 0 }: Props) => {
         </AccordionTrigger>
         {hasChildren && (
           <AccordionContent>
-            {children.map((file) => (
+            {childrenFolders.map((file) => (
               <SidebarFolder key={file.id} file={file} level={level + 1} />
             ))}
           </AccordionContent>

@@ -23,13 +23,20 @@ export const useSidebarFileBrowser = () =>
 
 export const SidebarFileBrowser = () => {
   const { files } = useFiles();
-  const topLevelFiles = files.filter((file) => !file.parent);
+  const topLevelFolders = files.filter(
+    (file) => file.type === 'folder' && !file.parent,
+  );
   const [openFiles, setOpenFiles] = React.useState<string[]>([]);
 
   return (
     <SidebarFileBrowserContext.Provider value={{ openFiles, setOpenFiles }}>
-      <div className='flex-1 border-2 border-blue-500'>
-        <Accordion type='single' collapsible className='w-full'>
+      <div className='flex-1 border-r'>
+        <Accordion
+          type='single'
+          defaultValue='all-files'
+          collapsible
+          className='w-full'
+        >
           <AccordionItem value='all-files' className='border-b'>
             <AccordionTrigger>
               <>
@@ -38,7 +45,7 @@ export const SidebarFileBrowser = () => {
               </>
             </AccordionTrigger>
             <AccordionContent>
-              {topLevelFiles.map((file) => (
+              {topLevelFolders.map((file) => (
                 <SidebarFolder key={file.id} file={file} level={1} />
               ))}
             </AccordionContent>
