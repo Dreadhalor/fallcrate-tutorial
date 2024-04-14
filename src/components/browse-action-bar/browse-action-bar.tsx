@@ -1,4 +1,4 @@
-import { BrowseActionBarButton } from "@/components/browse-action-bar-button";
+import { BrowseActionBarButton } from "@/components/browse-action-bar/browse-action-bar-button";
 import { MdUpload } from "react-icons/md";
 import { FiFolderPlus } from "react-icons/fi";
 import {
