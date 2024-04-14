@@ -1,69 +1,50 @@
-import React from "react";
-import { Button } from "@ui/button";
+'use client';
+
+import React from 'react';
 import {
   Accordion,
   AccordionChevron,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@ui/accordion";
-import { SidebarFolder } from "./sidebar-folder";
+} from '@ui/accordion';
+import { SidebarFolder } from './sidebar-folder';
+import { useFiles } from '@/providers/file-provider';
+
+type SidebarFileBrowserContextValue = {
+  openFiles: string[];
+  setOpenFiles: React.Dispatch<React.SetStateAction<string[]>>;
+};
+const SidebarFileBrowserContext = React.createContext(
+  {} as SidebarFileBrowserContextValue,
+);
+export const useSidebarFileBrowser = () =>
+  React.useContext(SidebarFileBrowserContext);
 
 export const SidebarFileBrowser = () => {
-  const folders = [
-    {
-      id: "0",
-      name: "Folder 1",
-      files: [
-        {
-          id: "3",
-          name: "Folder 3",
-          files: [
-            {
-              id: "7",
-              name: "Folder 7",
-            },
-          ],
-        },
-        {
-          id: "4",
-          name: "Folder 4",
-        },
-      ],
-    },
-    {
-      id: "1",
-      name: "Folder 2",
-      files: [
-        {
-          id: "5",
-          name: "Folder 5",
-        },
-        {
-          id: "6",
-          name: "Folder 6",
-        },
-      ],
-    },
-  ];
+  const { files } = useFiles();
+  const topLevelFiles = files.filter((file) => !file.parent);
+  const [openFiles, setOpenFiles] = React.useState<string[]>([]);
 
   return (
-    <div className="flex-1 border-2 border-blue-500">
-      <Accordion type="single" collapsible className="w-full">
-        <AccordionItem value="all-files" className="border-b">
-          <AccordionTrigger>
-            <>
-              <AccordionChevron />
-              All Files
-            </>
-          </AccordionTrigger>
-          <AccordionContent>
-            {folders.map((folder) => (
-              <SidebarFolder key={folder.id} folder={folder} level={1} />
-            ))}
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-    </div>
+    <SidebarFileBrowserContext.Provider value={{ openFiles, setOpenFiles }}>
+      <div className='flex-1 border-2 border-blue-500'>
+        <Accordion type='single' collapsible className='w-full'>
+          <AccordionItem value='all-files' className='border-b'>
+            <AccordionTrigger>
+              <>
+                <AccordionChevron />
+                All Files
+              </>
+            </AccordionTrigger>
+            <AccordionContent>
+              {topLevelFiles.map((file) => (
+                <SidebarFolder key={file.id} file={file} level={1} />
+              ))}
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </div>
+    </SidebarFileBrowserContext.Provider>
   );
 };

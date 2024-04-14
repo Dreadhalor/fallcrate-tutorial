@@ -1,32 +1,45 @@
-import React from "react";
+import React from 'react';
 import {
   Accordion,
   AccordionChevron,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@ui/accordion";
-import { FaFolder } from "react-icons/fa";
-import { BsDot } from "react-icons/bs";
+} from '@ui/accordion';
+import { FaFolder } from 'react-icons/fa';
+import { BsDot } from 'react-icons/bs';
+import { FallcrateFile } from '@/types';
+import { useFiles } from '@/providers/file-provider';
+import { useSidebarFileBrowser } from './sidebar-file-browser';
 
 type Props = {
-  folder: {
-    id: string;
-    name: string;
-    files?: { id: string; name: string }[];
-  };
+  file: FallcrateFile;
   level?: number;
 };
-export const SidebarFolder = ({
-  folder: { id, name, files = [] },
-  level = 0,
-}: Props) => {
+export const SidebarFolder = ({ file: { id, name }, level = 0 }: Props) => {
+  const { files } = useFiles();
+  const { openFiles, setOpenFiles } = useSidebarFileBrowser();
+
   const paddingPerLevel = 8;
-  const hasFiles = files.length > 0;
-  const Caret = hasFiles ? AccordionChevron : BsDot;
+  const children = files.filter((file) => file.parent === id);
+  const hasChildren = children.length > 0;
+  const Caret = hasChildren ? AccordionChevron : BsDot;
 
   return (
-    <Accordion key={id} type="single" collapsible className="w-full">
+    <Accordion
+      key={id}
+      type='single'
+      collapsible
+      className='w-full'
+      value={openFiles.includes(id) ? id : ''}
+      onValueChange={(value) => {
+        if (value) {
+          setOpenFiles((prev) => [...prev, value]);
+        } else {
+          setOpenFiles((prev) => prev.filter((_id) => _id !== id));
+        }
+      }}
+    >
       <AccordionItem value={id}>
         <AccordionTrigger>
           <>
@@ -39,10 +52,10 @@ export const SidebarFolder = ({
             {name}
           </>
         </AccordionTrigger>
-        {files.length > 0 && (
+        {hasChildren && (
           <AccordionContent>
-            {files.map((file) => (
-              <SidebarFolder key={file.id} folder={file} level={level + 1} />
+            {children.map((file) => (
+              <SidebarFolder key={file.id} file={file} level={level + 1} />
             ))}
           </AccordionContent>
         )}
