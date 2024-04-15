@@ -15,7 +15,7 @@ export const columns: ColumnDef<FallcrateFile>[] = [
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
         aria-label='Select row'
-        className='h-5 w-5'
+        className='invisible h-5 w-5 group-hover:visible data-[state=checked]:visible'
       />
     ),
   },
