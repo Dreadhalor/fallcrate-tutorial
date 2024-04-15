@@ -10,10 +10,6 @@ import { Checkbox } from '@ui/checkbox';
 export const columns: ColumnDef<FallcrateFile>[] = [
   {
     id: 'select',
-    size: 30,
-    minSize: 30,
-    maxSize: 30,
-    enableResizing: false,
     cell: ({ row }) => (
       <Checkbox
         checked={row.getIsSelected()}

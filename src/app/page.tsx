@@ -8,7 +8,7 @@ const Page = () => {
       <div className='flex w-[240px] flex-col bg-[#121211]'>
         <SidebarFileBrowser />
       </div>
-      <div className='flex-1 flex-col'>
+      <div className='flex flex-1 flex-col'>
         <BrowseActionBar />
         <MainBrowserTable />
       </div>

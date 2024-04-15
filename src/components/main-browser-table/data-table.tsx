@@ -48,8 +48,10 @@ export function DataTable<TData, TValue>({
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
+                const isSelect = header.id === 'select';
+                const width = isSelect ? 'w-10' : '';
                 return (
-                  <TableHead key={header.id}>
+                  <TableHead key={header.id} className={width}>
                     {header.isPlaceholder
                       ? null
                       : flexRender(
