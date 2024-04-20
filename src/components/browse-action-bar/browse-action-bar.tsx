@@ -1,3 +1,5 @@
+'use client';
+
 import { BrowseActionBarButton } from '@/components/browse-action-bar/browse-action-bar-button';
 import { MdUpload } from 'react-icons/md';
 import { FiFolderPlus } from 'react-icons/fi';
@@ -12,6 +14,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@ui/dropdown-menu';
+import { CreateNewFolderDialog } from '../dialogs/create-new-folder-dialog';
 
 export const BrowseActionBar = () => {
   return (
@@ -40,12 +43,14 @@ export const BrowseActionBar = () => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <BrowseActionBarButton>
-        <>
-          <FiFolderPlus size={24} />
-          Create folder
-        </>
-      </BrowseActionBarButton>
+      <CreateNewFolderDialog>
+        <BrowseActionBarButton>
+          <>
+            <FiFolderPlus size={24} />
+            Create folder
+          </>
+        </BrowseActionBarButton>
+      </CreateNewFolderDialog>
     </div>
   );
 };
