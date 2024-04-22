@@ -6,6 +6,9 @@ import { columns } from './columns';
 import { useFilesystem } from '@/providers/filesystem-provider';
 
 export const MainBrowserTable = () => {
-  const { files } = useFilesystem();
-  return <DataTable columns={columns} data={files} />;
+  const { currentFolder, files } = useFilesystem();
+  const fileId = currentFolder;
+  const filesInFolder = files.filter((_file) => _file.parent === fileId);
+
+  return <DataTable columns={columns} data={filesInFolder} />;
 };

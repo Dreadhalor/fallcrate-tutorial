@@ -6,6 +6,8 @@ import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '@ui/button';
 import { FaFile, FaFolder } from 'react-icons/fa';
 import { Checkbox } from '@ui/checkbox';
+import Link from 'next/link';
+import { BrowserItemName } from './browser-item-name';
 
 export const columns: ColumnDef<FallcrateFile>[] = [
   {
@@ -41,18 +43,8 @@ export const columns: ColumnDef<FallcrateFile>[] = [
         </Button>
       );
     },
-    cell: ({
-      row: {
-        original: { name, type },
-      },
-    }) => {
-      return (
-        <div className='flex items-center gap-2'>
-          {type === 'folder' && <FaFolder size={18} />}
-          {type === 'file' && <FaFile size={18} />}
-          {name}
-        </div>
-      );
+    cell: ({ row: { original: file } }) => {
+      return <BrowserItemName file={file} />;
     },
   },
   {

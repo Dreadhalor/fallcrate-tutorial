@@ -10,6 +10,7 @@ import {
 import { useFilesystem } from '@/providers/filesystem-provider';
 import { Input } from '@ui/input';
 import { Label } from '@ui/label';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 type Props = {
@@ -18,7 +19,8 @@ type Props = {
 export const CreateNewFolderDialog = ({ children }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState('');
-  const { createFolder } = useFilesystem();
+  const { createFolder, currentFolder } = useFilesystem();
+  const router = useRouter();
 
   useEffect(() => {
     if (!isOpen) {
@@ -60,8 +62,9 @@ export const CreateNewFolderDialog = ({ children }: Props) => {
             type='submit'
             disabled={!name}
             onClick={() => {
-              createFolder(name, null);
+              createFolder(name, currentFolder);
               setIsOpen(false);
+              router.refresh();
             }}
           >
             Create!

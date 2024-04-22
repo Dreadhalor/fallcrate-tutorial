@@ -22,7 +22,8 @@ export const useFirebaseAdapter = (): Database => {
       createFolder: async () => {},
     };
   }
-  const filesCollection = collection(db!, 'files');
+
+  const filesCollection = collection(db, 'files');
 
   const getFiles = async () => {
     const filesQuery = query(filesCollection);
