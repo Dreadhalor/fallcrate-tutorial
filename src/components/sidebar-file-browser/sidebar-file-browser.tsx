@@ -30,7 +30,7 @@ export const SidebarFileBrowser = () => {
 
   return (
     <SidebarFileBrowserContext.Provider value={{ openFiles, setOpenFiles }}>
-      <div className='flex-1 border-r'>
+      <div className='flex-1'>
         <Accordion
           type='single'
           defaultValue='all-files'
