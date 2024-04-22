@@ -9,7 +9,7 @@ import {
 import { FaFolder } from 'react-icons/fa';
 import { BsDot } from 'react-icons/bs';
 import { FallcrateFile } from '@/types';
-import { useFiles } from '@/providers/file-provider';
+import { useFilesystem } from '@/providers/filesystem-provider';
 import { useSidebarFileBrowser } from './sidebar-file-browser';
 
 type Props = {
@@ -17,7 +17,7 @@ type Props = {
   level?: number;
 };
 export const SidebarFolder = ({ file: { id, name }, level = 0 }: Props) => {
-  const { files } = useFiles();
+  const { files } = useFilesystem();
   const { openFiles, setOpenFiles } = useSidebarFileBrowser();
 
   const paddingPerLevel = 8;

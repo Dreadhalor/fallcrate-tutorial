@@ -9,7 +9,7 @@ import {
   AccordionTrigger,
 } from '@ui/accordion';
 import { SidebarFolder } from './sidebar-folder';
-import { useFiles } from '@/providers/file-provider';
+import { useFilesystem } from '@/providers/filesystem-provider';
 
 type SidebarFileBrowserContextValue = {
   openFiles: string[];
@@ -22,7 +22,7 @@ export const useSidebarFileBrowser = () =>
   React.useContext(SidebarFileBrowserContext);
 
 export const SidebarFileBrowser = () => {
-  const { files } = useFiles();
+  const { files } = useFilesystem();
   const topLevelFolders = files.filter(
     (file) => file.type === 'folder' && !file.parent,
   );

@@ -3,9 +3,9 @@
 import React from 'react';
 import { DataTable } from './data-table';
 import { columns } from './columns';
-import { useFiles } from '@/providers/file-provider';
+import { useFilesystem } from '@/providers/filesystem-provider';
 
 export const MainBrowserTable = () => {
-  const { files } = useFiles();
+  const { files } = useFilesystem();
   return <DataTable columns={columns} data={files} />;
 };

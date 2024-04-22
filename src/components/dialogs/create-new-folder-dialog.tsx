@@ -7,6 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { useFilesystem } from '@/providers/filesystem-provider';
 import { Input } from '@ui/input';
 import { Label } from '@ui/label';
 import { useEffect, useState } from 'react';
@@ -17,6 +18,7 @@ type Props = {
 export const CreateNewFolderDialog = ({ children }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState('');
+  const { createFolder } = useFilesystem();
 
   useEffect(() => {
     if (!isOpen) {
@@ -54,7 +56,14 @@ export const CreateNewFolderDialog = ({ children }: Props) => {
           >
             Cancel
           </Button>
-          <Button type='submit' disabled={!name}>
+          <Button
+            type='submit'
+            disabled={!name}
+            onClick={() => {
+              createFolder(name, null);
+              setIsOpen(false);
+            }}
+          >
             Create!
           </Button>
         </DialogFooter>
