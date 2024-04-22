@@ -1,3 +1,7 @@
+'use client';
+
+import { useFilesystem } from '@/providers/filesystem-provider';
+import { SlashIcon } from '@radix-ui/react-icons';
 import {
   Breadcrumb,
   BreadcrumbEllipsis,
@@ -13,27 +17,39 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@ui/dropdown-menu';
+import Link from 'next/link';
 
 export function FileBreadcrumbs() {
+  const { currentPath, getFullPathname } = useFilesystem();
+  const breadcrumbsToShow = currentPath.slice(0, currentPath.length - 1);
+
   return (
-    <Breadcrumb>
+    <Breadcrumb className='px-8'>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href='/'>Home</BreadcrumbLink>
+          <BreadcrumbLink asChild>
+            <Link href={`/home`}>All Files</Link>
+          </BreadcrumbLink>
         </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <DropdownMenu>
-            <DropdownMenuTrigger className='flex items-center gap-1'>
-              <BreadcrumbEllipsis className='h-4 w-4' />
-              <span className='sr-only'>Toggle menu</span>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align='start'>
-              <DropdownMenuItem>Documentation</DropdownMenuItem>
-              <DropdownMenuItem>Themes</DropdownMenuItem>
-              <DropdownMenuItem>GitHub</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+        <BreadcrumbSeparator>
+          <SlashIcon />
+        </BreadcrumbSeparator>
+        {breadcrumbsToShow.map(({ name, id }, index) => {
+          return (
+            <>
+              <BreadcrumbItem key={id}>
+                <BreadcrumbLink asChild>
+                  <Link href={`/home/${getFullPathname(id)}`}>{name}</Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator>
+                <SlashIcon />
+              </BreadcrumbSeparator>
+            </>
+          );
+        })}
+        {/* <BreadcrumbItem>
+          <BreadcrumbLink href='/'>Home</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
@@ -42,7 +58,7 @@ export function FileBreadcrumbs() {
         <BreadcrumbSeparator />
         <BreadcrumbItem>
           <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
-        </BreadcrumbItem>
+        </BreadcrumbItem> */}
       </BreadcrumbList>
     </Breadcrumb>
   );

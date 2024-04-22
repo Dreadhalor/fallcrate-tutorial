@@ -9,6 +9,7 @@ type FileContextValue = {
   files: FallcrateFile[];
   createFolder: (name: string, parent: string | null) => void;
   currentFolder: string | null;
+  currentPath: FallcrateFile[];
   getFullPathname: (id: string) => string;
 };
 
@@ -23,6 +24,7 @@ export const FilesystemProvider = ({
   const { files, createFolder, getFullPathname, findFileFromPathname } =
     useFiles();
   const [currentFolder, setCurrentFolder] = React.useState<string | null>(null);
+  const [currentPath, setCurrentPath] = React.useState<FallcrateFile[]>([]);
   const { folderName = [] } = useParams();
 
   useEffect(() => {
@@ -35,14 +37,46 @@ export const FilesystemProvider = ({
     const fullPathname = `${decodedFolderNames.join('/')}`;
     console.log('fullPathname', fullPathname);
     const file = findFileFromPathname(fullPathname);
+    console.log('currentPath', decodedFolderNames);
     setCurrentFolder(file?.id || null);
   }, [files, folderName, findFileFromPathname]);
+
+  useEffect(() => {
+    if (!currentFolder) {
+      setCurrentPath([]);
+      return;
+    }
+
+    const file = files.find((file) => file.id === currentFolder) || null;
+    const path: FallcrateFile[] = [];
+    if (file) {
+      path.push(file);
+    } else {
+      setCurrentPath([]);
+      return;
+    }
+    let nextParentId = file?.parent;
+    while (nextParentId) {
+      const parent = files.find((file) => file.id === nextParentId);
+      if (parent) {
+        path.unshift(parent);
+      }
+      nextParentId = parent?.parent || null;
+    }
+    setCurrentPath(path);
+  }, [currentFolder, files]);
 
   console.log('folderName', folderName);
 
   return (
     <FileContext.Provider
-      value={{ files, createFolder, currentFolder, getFullPathname }}
+      value={{
+        files,
+        createFolder,
+        currentFolder,
+        currentPath,
+        getFullPathname,
+      }}
     >
       {children}
     </FileContext.Provider>

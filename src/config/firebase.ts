@@ -1,6 +1,7 @@
 import { getApp, getApps, initializeApp } from 'firebase/app';
 
 // Your web app's Firebase configuration
+// Contrary to usual practice, these are not *strictly* secret so it's safe to expose them
 const firebaseConfig = {
   apiKey: 'AIzaSyCQcQ_nru5koXSKsk7KCcbmtDKWuyzBIBE',
   authDomain: 'fallcrate-tutorial.firebaseapp.com',
