@@ -33,11 +33,8 @@ export const FilesystemProvider = ({
     const decodedFolderNames = folderNameArray.map((name) =>
       decodeURIComponent(name),
     );
-    console.log('decodedFolderNames', decodedFolderNames);
     const fullPathname = `${decodedFolderNames.join('/')}`;
-    console.log('fullPathname', fullPathname);
     const file = findFileFromPathname(fullPathname);
-    console.log('currentPath', decodedFolderNames);
     setCurrentFolder(file?.id || null);
   }, [files, folderName, findFileFromPathname]);
 
@@ -65,8 +62,6 @@ export const FilesystemProvider = ({
     }
     setCurrentPath(path);
   }, [currentFolder, files]);
-
-  console.log('folderName', folderName);
 
   return (
     <FileContext.Provider

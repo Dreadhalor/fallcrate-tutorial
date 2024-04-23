@@ -16,7 +16,6 @@ export const useFiles = () => {
   };
   const findFileFromPathname = (pathname: string): FallcrateFile | null => {
     const pathParts = pathname.split('/');
-    console.log('pathParts', pathParts);
     const fileName = pathParts.pop();
 
     if (pathParts.length === 0) {

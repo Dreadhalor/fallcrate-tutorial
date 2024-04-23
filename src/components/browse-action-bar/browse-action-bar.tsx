@@ -7,7 +7,6 @@ import {
   MdOutlineDriveFolderUpload,
   MdOutlineUploadFile,
 } from 'react-icons/md';
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,8 +14,14 @@ import {
   DropdownMenuTrigger,
 } from '@ui/dropdown-menu';
 import { CreateNewFolderDialog } from '../dialogs/create-new-folder-dialog';
+import { useFileUpload } from '@/hooks/use-file-upload';
+import { Input } from '../ui/input';
+import { useRef } from 'react';
 
 export const BrowseActionBar = () => {
+  const { startUpload, filesToUpload, setFilesToUpload } = useFileUpload();
+  const uploadInputRef = useRef<HTMLInputElement>(null);
+
   return (
     <div className='flex gap-[20px] p-2'>
       <DropdownMenu modal={false}>
@@ -29,7 +34,10 @@ export const BrowseActionBar = () => {
           </BrowseActionBarButton>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='start'>
-          <DropdownMenuItem className='cursor-pointer gap-2'>
+          <DropdownMenuItem
+            className='cursor-pointer gap-2'
+            onClick={() => uploadInputRef.current?.click()}
+          >
             <>
               <MdOutlineUploadFile size={20} />
               File
@@ -51,6 +59,19 @@ export const BrowseActionBar = () => {
           </>
         </BrowseActionBarButton>
       </CreateNewFolderDialog>
+      <Input
+        ref={uploadInputRef}
+        className='sr-only h-0 w-0 overflow-hidden'
+        type='file'
+        onChange={(e) => {
+          console.log('files', e.target.files);
+          if (e.target.files) {
+            // setFilesToUpload(Array.from(e.target.files));
+            // console.log('files', e.target.files);
+            startUpload(Array.from(e.target.files));
+          }
+        }}
+      />
     </div>
   );
 };
