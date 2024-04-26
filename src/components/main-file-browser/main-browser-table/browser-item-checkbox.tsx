@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Checkbox } from '@ui/checkbox';
 import { Row } from '@tanstack/react-table';
 import { FallcrateFile } from '@/types';
