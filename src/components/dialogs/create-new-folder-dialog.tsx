@@ -62,7 +62,10 @@ export const CreateNewFolderDialog = ({ children }: Props) => {
             type='submit'
             disabled={!name}
             onClick={() => {
-              createFolder(name, currentFolder);
+              createFolder({
+                name,
+                parent: currentFolder,
+              });
               setIsOpen(false);
               router.refresh();
             }}
