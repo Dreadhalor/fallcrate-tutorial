@@ -25,6 +25,7 @@ export const useFirestoreAdapter = (): Database => {
       getFiles: async () => [],
       createFolder: async () => {},
       createFile: async () => {},
+      renameFile: async () => {},
     };
   }
 
@@ -57,5 +58,10 @@ export const useFirestoreAdapter = (): Database => {
   const createFile = async (args: CreateFileParams) =>
     createNode({ ...args, type: 'file' });
 
-  return { getFiles, createFolder, createFile };
+  const renameFile = async (id: string, name: string) => {
+    const docRef = doc(filesCollection, id);
+    return setDoc(docRef, { name }, { merge: true });
+  };
+
+  return { getFiles, createFolder, createFile, renameFile };
 };

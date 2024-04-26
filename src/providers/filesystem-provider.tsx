@@ -13,6 +13,9 @@ type FileContextValue = {
   currentPath: FallcrateFile[];
   getFullPathname: (id: string | null) => string;
   getParentPathname: (id: string) => string;
+  renameFile: (id: string, name: string) => void;
+  selectedFiles: string[];
+  setSelectedFiles: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
 const FileContext = React.createContext({} as FileContextValue);
@@ -29,9 +32,11 @@ export const FilesystemProvider = ({
     getFullPathname,
     getParentPathname,
     findFileFromPathname,
+    renameFile,
   } = useFiles();
   const [currentFolder, setCurrentFolder] = React.useState<string | null>(null);
   const [currentPath, setCurrentPath] = React.useState<FallcrateFile[]>([]);
+  const [selectedFiles, setSelectedFiles] = React.useState<string[]>([]);
   const { folderName = [] } = useParams();
 
   useEffect(() => {
@@ -70,6 +75,10 @@ export const FilesystemProvider = ({
     setCurrentPath(path);
   }, [currentFolder, files]);
 
+  useEffect(() => {
+    setSelectedFiles([]);
+  }, [currentFolder]);
+
   return (
     <FileContext.Provider
       value={{
@@ -79,6 +88,9 @@ export const FilesystemProvider = ({
         currentPath,
         getFullPathname,
         getParentPathname,
+        renameFile,
+        selectedFiles,
+        setSelectedFiles,
       }}
     >
       {children}

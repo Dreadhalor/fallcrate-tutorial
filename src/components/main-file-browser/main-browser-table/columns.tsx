@@ -4,22 +4,13 @@ import { FallcrateFile } from '@/types';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
 import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '@ui/button';
-import { FaFile, FaFolder } from 'react-icons/fa';
-import { Checkbox } from '@ui/checkbox';
-import Link from 'next/link';
 import { BrowserItemName } from './browser-item-name';
+import { BrowserItemCheckbox } from './browser-item-checkbox';
 
 export const columns: ColumnDef<FallcrateFile>[] = [
   {
     id: 'select',
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label='Select row'
-        className='invisible h-5 w-5 group-hover:visible data-[state=checked]:visible'
-      />
-    ),
+    cell: ({ row }) => <BrowserItemCheckbox row={row} />,
   },
   {
     accessorKey: 'name',

@@ -4,7 +4,7 @@ import { useDB } from './use-db';
 import { adapters } from '@/adapters';
 
 export const useFiles = () => {
-  const { getFiles, createFolder } = useDB(adapters.firestore);
+  const { getFiles, createFolder, renameFile } = useDB(adapters.firestore);
 
   const [files, setFiles] = useState<FallcrateFile[]>([]);
 
@@ -61,5 +61,6 @@ export const useFiles = () => {
     getFullPathname,
     getParentPathname,
     findFileFromPathname,
+    renameFile,
   };
 };
