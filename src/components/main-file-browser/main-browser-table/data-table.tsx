@@ -18,17 +18,27 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useState } from 'react';
+import { FallcrateFile } from '@/types';
+import { useFilesystem } from '@/providers/filesystem-provider';
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+interface DataTableProps {
+  columns: ColumnDef<FallcrateFile>[];
+  data: FallcrateFile[];
 }
 
-export function DataTable<TData, TValue>({
-  columns,
-  data,
-}: DataTableProps<TData, TValue>) {
+export function DataTable({ columns, data }: DataTableProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
+  const { selectedFiles } = useFilesystem();
+
+  const getSelection = () => {
+    return selectedFiles.reduce(
+      (acc, id) => {
+        acc[id] = true;
+        return acc;
+      },
+      {} as Record<string, boolean>,
+    );
+  };
 
   const table = useReactTable({
     data,
@@ -36,8 +46,10 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    getRowId: (row) => row.id,
     state: {
       sorting,
+      rowSelection: getSelection(),
     },
   });
 

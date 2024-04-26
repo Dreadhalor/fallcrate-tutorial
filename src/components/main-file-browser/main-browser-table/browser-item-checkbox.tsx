@@ -9,22 +9,15 @@ interface Props {
 }
 export const BrowserItemCheckbox = ({ row }: Props) => {
   const file = row.original;
-  const { selectedFiles, setSelectedFiles } = useFilesystem();
-
-  useEffect(() => {
-    if (selectedFiles.includes(file.id)) {
-      row.toggleSelected(true);
-    }
-  }, [file.id, selectedFiles, row]);
+  const { setSelectedFiles } = useFilesystem();
 
   return (
     <Checkbox
-      checked={selectedFiles.includes(file.id)}
+      checked={row.getIsSelected()}
       onCheckedChange={(value) => {
         setSelectedFiles((prev) =>
           value ? [...prev, file.id] : prev.filter((id) => id !== file.id),
         );
-        row.toggleSelected(!!value);
       }}
       aria-label='Select row'
       className='invisible h-5 w-5 group-hover:visible data-[state=checked]:visible'
