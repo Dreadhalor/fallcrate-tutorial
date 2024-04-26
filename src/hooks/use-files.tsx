@@ -4,15 +4,22 @@ import { useDB } from './use-db';
 import { adapters } from '@/adapters';
 
 export const useFiles = () => {
-  const { getFiles, createFolder } = useDB(adapters.firebase);
+  const { getFiles, createFolder } = useDB(adapters.firestore);
 
   const [files, setFiles] = useState<FallcrateFile[]>([]);
 
-  const getFullPathname = (id: string): string => {
+  const getFullPathname = (id: string | null): string => {
+    if (!id) return '';
     const file = files.find((file) => file.id === id);
     if (!file) return '';
     if (!file.parent) return file.name;
     return `${getFullPathname(file.parent)}/${file.name}`;
+  };
+  const getParentPathname = (id: string): string => {
+    const file = files.find((file) => file.id === id);
+    if (!file) return '';
+    if (!file.parent) return '';
+    return getFullPathname(file.parent);
   };
   const findFileFromPathname = (pathname: string): FallcrateFile | null => {
     const pathParts = pathname.split('/');
@@ -52,6 +59,7 @@ export const useFiles = () => {
     files,
     createFolder,
     getFullPathname,
+    getParentPathname,
     findFileFromPathname,
   };
 };

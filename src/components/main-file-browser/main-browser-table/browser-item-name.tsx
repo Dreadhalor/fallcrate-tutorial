@@ -9,11 +9,13 @@ interface Props {
 }
 export const BrowserItemName = ({ file: { id, type, name } }: Props) => {
   const router = useRouter();
-  const { getFullPathname } = useFilesystem();
+  const { getFullPathname, getParentPathname } = useFilesystem();
+  const parentPathname = getParentPathname(id);
   const fullPathname = getFullPathname(id);
 
   const handleButtonClick = () => {
-    router.push(`/home/${fullPathname}`);
+    if (type === 'folder') router.push(`/home/${fullPathname}`);
+    if (type === 'file') router.push(`/home/${parentPathname}?preview=${name}`);
   };
 
   return (

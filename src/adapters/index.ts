@@ -1,5 +1,5 @@
-import { useFirebaseAdapter } from './use-firebase-adapter';
+import { useFirestoreAdapter } from './use-firestore-adapter';
 
 export const adapters = {
-  firebase: useFirebaseAdapter,
+  firestore: useFirestoreAdapter,
 };

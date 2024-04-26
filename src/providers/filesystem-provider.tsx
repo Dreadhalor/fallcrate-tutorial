@@ -4,13 +4,15 @@ import { FallcrateFile } from '@/types';
 import React, { useEffect } from 'react';
 import { useFiles } from '@/hooks/use-files';
 import { useParams } from 'next/navigation';
+import { CreateFileParams } from '@/types/db';
 
 type FileContextValue = {
   files: FallcrateFile[];
-  createFolder: (name: string, parent: string | null) => void;
+  createFolder: (args: CreateFileParams) => void;
   currentFolder: string | null;
   currentPath: FallcrateFile[];
-  getFullPathname: (id: string) => string;
+  getFullPathname: (id: string | null) => string;
+  getParentPathname: (id: string) => string;
 };
 
 const FileContext = React.createContext({} as FileContextValue);
@@ -21,8 +23,13 @@ export const FilesystemProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const { files, createFolder, getFullPathname, findFileFromPathname } =
-    useFiles();
+  const {
+    files,
+    createFolder,
+    getFullPathname,
+    getParentPathname,
+    findFileFromPathname,
+  } = useFiles();
   const [currentFolder, setCurrentFolder] = React.useState<string | null>(null);
   const [currentPath, setCurrentPath] = React.useState<FallcrateFile[]>([]);
   const { folderName = [] } = useParams();
@@ -71,6 +78,7 @@ export const FilesystemProvider = ({
         currentFolder,
         currentPath,
         getFullPathname,
+        getParentPathname,
       }}
     >
       {children}

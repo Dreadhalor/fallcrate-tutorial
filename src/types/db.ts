@@ -1,6 +1,12 @@
 import { FallcrateFile } from '@/types';
 
+export interface CreateFileParams {
+  name: string;
+  parent: string | null;
+  id?: string;
+}
 export type Database = {
   getFiles: () => Promise<FallcrateFile[]>;
-  createFolder: (name: string, parent: string | null) => void;
+  createFolder: (args: CreateFileParams) => void;
+  createFile: (args: CreateFileParams) => void;
 };

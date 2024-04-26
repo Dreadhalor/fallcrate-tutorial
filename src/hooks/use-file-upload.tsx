@@ -1,27 +1,29 @@
-import { useUploadThing } from '@/lib/utils/uploadthing';
-import { useEffect, useState } from 'react';
+import { adapters } from '@/adapters';
+import { useBlobStorage } from './use-blob-storage';
+import { useDB } from './use-db';
 
 export const useFileUpload = () => {
-  const [filesToUpload, setFilesToUpload] = useState<File[]>([]);
+  const { uploadFileBlob } = useBlobStorage();
+  const { createFile } = useDB(adapters.firestore);
 
-  useEffect(() => {
-    console.log('filesToUpload', filesToUpload);
-  }, [filesToUpload]);
+  const uploadFile = (file: File, parent: string | null) => {
+    uploadFileBlob({
+      file,
+      onProgress: (snapshot) => {
+        console.log('progress', snapshot);
+      },
+      onError: (error) => {
+        console.error('error', error);
+      },
+      onComplete: (id) => {
+        createFile({
+          id,
+          name: file.name,
+          parent,
+        });
+      },
+    });
+  };
 
-  const { startUpload } = useUploadThing('imageUploader', {
-    onClientUploadComplete: () => {
-      alert('uploaded successfully!');
-    },
-    onUploadError: () => {
-      alert('error occurred while uploading');
-    },
-    onUploadBegin: () => {
-      alert('upload has begun');
-    },
-    onUploadProgress: (progress) => {
-      console.log('progress', progress);
-    },
-  });
-
-  return { startUpload, filesToUpload, setFilesToUpload };
+  return { uploadFile };
 };

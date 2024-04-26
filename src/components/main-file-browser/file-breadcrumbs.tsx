@@ -4,20 +4,13 @@ import { useFilesystem } from '@/providers/filesystem-provider';
 import { SlashIcon } from '@radix-ui/react-icons';
 import {
   Breadcrumb,
-  BreadcrumbEllipsis,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@ui/breadcrumb';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@ui/dropdown-menu';
 import Link from 'next/link';
+import { Fragment } from 'react';
 
 export function FileBreadcrumbs() {
   const { currentPath, getFullPathname } = useFilesystem();
@@ -34,10 +27,10 @@ export function FileBreadcrumbs() {
         <BreadcrumbSeparator>
           <SlashIcon />
         </BreadcrumbSeparator>
-        {breadcrumbsToShow.map(({ name, id }, index) => {
+        {breadcrumbsToShow.map(({ name, id }) => {
           return (
-            <>
-              <BreadcrumbItem key={id}>
+            <Fragment key={id}>
+              <BreadcrumbItem>
                 <BreadcrumbLink asChild>
                   <Link href={`/home/${getFullPathname(id)}`}>{name}</Link>
                 </BreadcrumbLink>
@@ -45,20 +38,9 @@ export function FileBreadcrumbs() {
               <BreadcrumbSeparator>
                 <SlashIcon />
               </BreadcrumbSeparator>
-            </>
+            </Fragment>
           );
         })}
-        {/* <BreadcrumbItem>
-          <BreadcrumbLink href='/'>Home</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbLink href='/docs/components'>Components</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
-        </BreadcrumbItem> */}
       </BreadcrumbList>
     </Breadcrumb>
   );

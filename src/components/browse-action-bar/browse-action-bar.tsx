@@ -14,12 +14,14 @@ import {
   DropdownMenuTrigger,
 } from '@ui/dropdown-menu';
 import { CreateNewFolderDialog } from '../dialogs/create-new-folder-dialog';
-import { useFileUpload } from '@/hooks/use-file-upload';
-import { Input } from '../ui/input';
+import { Input } from '@ui/input';
 import { useRef } from 'react';
+import { useFileUpload } from '@/hooks/use-file-upload';
+import { useFilesystem } from '@/providers/filesystem-provider';
 
 export const BrowseActionBar = () => {
-  const { startUpload, filesToUpload, setFilesToUpload } = useFileUpload();
+  const { uploadFile } = useFileUpload();
+  const { currentFolder } = useFilesystem();
   const uploadInputRef = useRef<HTMLInputElement>(null);
 
   return (
@@ -64,11 +66,8 @@ export const BrowseActionBar = () => {
         className='sr-only h-0 w-0 overflow-hidden'
         type='file'
         onChange={(e) => {
-          console.log('files', e.target.files);
           if (e.target.files) {
-            // setFilesToUpload(Array.from(e.target.files));
-            // console.log('files', e.target.files);
-            startUpload(Array.from(e.target.files));
+            uploadFile(e.target.files[0], currentFolder);
           }
         }}
       />

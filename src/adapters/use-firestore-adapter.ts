@@ -2,7 +2,7 @@
 
 import { app } from '@/config/firebase';
 import { FallcrateFile } from '@/types';
-import { Database } from '@/types/db';
+import { Database, CreateFileParams } from '@/types/db';
 import {
   collection,
   getFirestore,
@@ -13,13 +13,18 @@ import {
 } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 
-export const useFirebaseAdapter = (): Database => {
+interface CreateNodeParams extends CreateFileParams {
+  type: 'folder' | 'file';
+}
+
+export const useFirestoreAdapter = (): Database => {
   const db = app ? getFirestore(app) : null;
 
   if (!db) {
     return {
       getFiles: async () => [],
       createFolder: async () => {},
+      createFile: async () => {},
     };
   }
 
@@ -31,17 +36,26 @@ export const useFirebaseAdapter = (): Database => {
     return snapshot.docs.map((doc) => doc.data() as FallcrateFile);
   };
 
-  const createFolder = async (name: string, parent: string | null) => {
-    const id = uuidv4();
-    const authorizedFolder = {
+  const createNode = ({
+    name,
+    parent,
+    id = uuidv4(),
+    type,
+  }: CreateNodeParams) => {
+    const authorizedNode = {
       name,
       parent,
-      type: 'folder',
+      type,
       id,
     } satisfies FallcrateFile;
     const docRef = doc(filesCollection, id);
-    await setDoc(docRef, authorizedFolder);
+    return setDoc(docRef, authorizedNode);
   };
+  const createFolder = async (args: CreateFileParams) =>
+    createNode({ ...args, type: 'folder' });
 
-  return { getFiles, createFolder };
+  const createFile = async (args: CreateFileParams) =>
+    createNode({ ...args, type: 'file' });
+
+  return { getFiles, createFolder, createFile };
 };
